@@ -1,11 +1,16 @@
-# Christopher Rock
-# for CS 437 IOT, Fall 2024
+# Christopher Rock (cmrock2)
+# CS 437 IOT Fall 2024
+# Lab 2: LTE: Self-Driving Car - Networking
 
 import picar_4wd as fc
 import time
 import math
+import threading
+
 
 POW = 50
+path = []
+keep_running = True  # flag to break out of loop when exiting
 
 
 def right_turn():
@@ -77,56 +82,56 @@ def move_dist(dist_goal):
     return delta
 
 
-def follow_moves(path):
-    init()
-    print("========== STARTING FOLLOW MOVES =============")
-    print(path)
-    for i, step in enumerate(path):
-        # print("MOVING!", step)
-        spin(step[0])
-        move_dist(step[1])
-    print("SUCCESS ALL MOVES COMPLETE")
-    return True
+def add_move(new_move):
+    global path
+    if new_move == "forward":
+        path.append((0, 5))
+    elif new_move == "back":
+        path.append((0, -5))
+    elif new_move == "left":
+        path.append((-45, 0))
+    elif new_move == "right":
+        path.append((45, 0))
 
 
-initialized = False
+def follow_moves():
+    print("========== STARTING FOLLOW MOVES THREAD =============")
+    global path, keep_running
+    try:
+        while keep_running:
+            if len(path) > 0:
+                next_move = path[0]
+                path = path[1:]
+                print("Doing next move:", next_move)
+                # spin(next_move[0])
+                # move_dist(next_move[1])
+            time.sleep(0.5)
+    except KeyboardInterrupt:
+        print("Program stopped by the user.")
+
+
+def get_status():
+    curr_speed = fc.speed_val()
+    cpu_temp = fc.cpu_temperature()
+    pow = fc.power_read()
+    # Create a formatted string containing all the information
+    status = f"Current Speed: {curr_speed} units, CPU Temperature: {cpu_temp} °C, Power: {pow} watts"
+    return status
 
 
 def init():
-    global initialized
-    if not initialized:
-        fc.right_rear_speed.start()  # start monitoring speed thread
-        fc.left_rear_speed.start()  # start monitoring speed thread
-        initialized = True
+    global move_thread
+    fc.right_rear_speed.start()  # start monitoring speed thread
+    fc.left_rear_speed.start()  # start monitoring speed thread
+    move_thread = threading.Thread(target=follow_moves)
+    move_thread.start()
 
 
 def cleanup():
-    if initialized:
-        print("Sweeping up motors...")
-        fc.right_rear_speed.deinit()  # stop thread
-        fc.left_rear_speed.deinit()  # stop thread
+    global move_thread, keep_running
+    print("Sweeping up motors...")
+    fc.right_rear_speed.deinit()  # stop thread
+    fc.left_rear_speed.deinit()  # stop thread
     fc.stop()
-
-
-if __name__ == "__main__":
-    try:
-        init()
-        path = [
-            (0, 1.4),
-            (0, 1.4),
-            (0, 1.4),
-            (0, 1.4),
-            (0, 1.4),
-            (0, 1.4),
-            (0, 1.4),
-            (45, 1),
-            (0, 1),
-            (0, 1),
-            (0, 1),
-            (0, 1),
-            (0, 1),
-        ]
-        follow_moves(path)
-
-    finally:
-        cleanup()
+    keep_running = False  # signal to break out of loop
+    move_thread.join()

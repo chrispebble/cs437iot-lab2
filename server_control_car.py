@@ -103,8 +103,8 @@ def follow_moves():
                 next_move = path[0]
                 path = path[1:]
                 print("Doing next move:", next_move)
-                # spin(next_move[0])
-                # move_dist(next_move[1])
+                spin(next_move[0])
+                move_dist(next_move[1])
             time.sleep(0.5)
     except KeyboardInterrupt:
         print("Program stopped by the user.")

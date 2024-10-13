@@ -1,3 +1,7 @@
+// Christopher Rock (cmrock2)
+// CS 437 IOT Fall 2024
+// Lab 2: LTE: Self-Driving Car - Networking
+
 //Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 const path = require('path')

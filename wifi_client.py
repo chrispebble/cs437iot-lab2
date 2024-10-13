@@ -1,3 +1,7 @@
+# Christopher Rock (cmrock2)
+# CS 437 IOT Fall 2024
+# Lab 2: LTE: Self-Driving Car - Networking
+
 import socket
 
 HOST = "192.168.1.80" # IP address of your Raspberry PI

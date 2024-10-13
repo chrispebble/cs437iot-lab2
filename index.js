@@ -1,3 +1,7 @@
+// Christopher Rock (cmrock2)
+// CS 437 IOT Fall 2024
+// Lab 2: LTE: Self-Driving Car - Networking
+
 var server_port = 65432;
 var server_addr = "192.168.1.80";   // the IP address of Raspberry Pi
 

@@ -6,6 +6,43 @@
             body{
                 margin: 10px;
             }
+            .controller {
+                position: relative;
+                width: 200px;
+                height: 200px;
+                margin: 50px auto; /* centers the container */
+            }
+
+            .controller button {
+                position: absolute;
+                width: 80px;
+                height: 40px;
+            }
+
+            .forward {
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .back {
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .left {
+                top: 50%;
+                left: 0;
+                transform: translateY(-50%);
+            }
+
+            .right {
+                top: 50%;
+                right: 0;
+                transform: translateY(-50%);
+            }
+
         </style>
 
         <script src="index.js"></script>
@@ -18,15 +55,17 @@
     <h3>Christopher Rock (cmrock2)</h3>
 
 
-    <button class="btn-success" onclick="command('forward')">Forward</button>
-    <button class="btn-success" onclick="command('back')">Back</button>
-    <button class="btn-success" onclick="command('left')">Left</button>
-    <button class="btn-success" onclick="command('right')">right</button>
+    <div class="controller">
+        <button class="btn-success forward" onclick="command('forward')">Forward</button>
+        <button class="btn-success back" onclick="command('back')">Back</button>
+        <button class="btn-success left" onclick="command('left')">Left</button>
+        <button class="btn-success right" onclick="command('right')">Right</button>
+    </div>
 
     <br>
-    Sending: <span id="sending_to_server"></span>
+    Last sent: <span id="sending_to_server"></span>
     <br>
-    Response: <span id="info_from_server"></span>
+    Server says: <span id="info_from_server"></span>
 
 </body>
 

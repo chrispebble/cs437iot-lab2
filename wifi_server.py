@@ -4,6 +4,8 @@
 
 import socket
 import server_control_car as scc
+import datetime
+
 
 HOST = "192.168.1.80"  # IP address of your Raspberry PI
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
@@ -17,7 +19,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     client = None
 
     try:
-        scc.init()
 
         while keep_running:
             client, clientInfo = s.accept()
@@ -26,26 +27,31 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             if data != b"":
                 cmd = data.decode("utf-8").strip()
                 response = ""
-                # print(cmd)
                 if cmd == "left":
                     response = "go left"
-                    scc.add_move("left")
+                    scc.left_turn()
                 elif cmd == "right":
                     response = "go right"
-                    scc.add_move("right")
+                    scc.right_turn()
                 elif cmd == "forward":
                     response = "go forward"
-                    scc.add_move("forward")
+                    scc.move_forward()
                 elif cmd == "back":
                     response = "go back"
-                    scc.add_move("back")
+                    scc.move_backward()
                 elif cmd == "status":
                     response = scc.get_status()
                 else:
                     response = "No match:" + cmd
+
                 print(response)
 
-                client.sendall(response.encode("utf-8"))  # Echo back to client
+                timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                response_with_timestamp = f"{timestamp} - {response}"
+
+                client.sendall(
+                    response_with_timestamp.encode("utf-8")
+                )  # Echo back to client
 
     except KeyboardInterrupt:
         keep_running = False
@@ -55,4 +61,3 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         if client:
             client.close()
         s.close()
-        scc.cleanup()

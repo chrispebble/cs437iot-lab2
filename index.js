@@ -17,11 +17,18 @@ function client(input) {
 
     // get the data from the server
     client.on('data', (data) => {
-        document.getElementById("info_from_server").innerHTML = data;
+        const infoElement = document.getElementById("info_from_server");
+        // Prepend the new data at the top
+        infoElement.innerHTML = `${data}<br>` + infoElement.innerHTML;
         console.log(data.toString());
+    
+        // Optional: Scroll to top of the element
+        infoElement.scrollTop = 0;
+    
         client.end();
         client.destroy();
     });
+    
 
     client.on('end', () => {
         console.log('disconnected from server');
@@ -44,3 +51,22 @@ function requestStatusUpdate() {
 
 // Set up an interval to send status requests every 5 seconds
 setInterval(requestStatusUpdate, 5000);
+
+
+// Add event listener for keypresses
+document.addEventListener('keydown', function(event) {
+    switch(event.key) {
+        case 'e': // Forward
+            command('forward');
+            break;
+        case 'd': // Back
+            command('back');
+            break;
+        case 's': // Left
+            command('left');
+            break;
+        case 'f': // Right
+            command('right');
+            break;
+    }
+});

@@ -13,14 +13,14 @@
             }
             .controller {
                 position: relative;
-                width: 200px;
+                width: 240px;
                 height: 200px;
                 margin: 50px auto; /* centers the container */
             }
 
             .controller button {
                 position: absolute;
-                width: 80px;
+                width: 100px;
                 height: 40px;
             }
 
@@ -61,16 +61,17 @@
 
 
     <div class="controller">
-        <button class="btn-success forward" onclick="command('forward')">Forward</button>
-        <button class="btn-success back" onclick="command('back')">Back</button>
-        <button class="btn-success left" onclick="command('left')">Left</button>
-        <button class="btn-success right" onclick="command('right')">Right</button>
+        <button class="btn-success forward" onclick="command('forward')">Forward (e)</button>
+        <button class="btn-success back" onclick="command('back')">Back (d)</button>
+        <button class="btn-success left" onclick="command('left')">Left (s)</button>
+        <button class="btn-success right" onclick="command('right')">Right (f)</button>
     </div>
 
     <br>
     Last sent: <span id="sending_to_server"></span>
     <br>
-    Server says: <span id="info_from_server"></span>
+    <h4>Server says:</h4>
+    <span id="info_from_server"></span>
 
 </body>
 

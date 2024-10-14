@@ -40,6 +40,9 @@ def move_backward():
 
 def get_status():
     cpu_temp = fc.cpu_temperature()
+    cpu_usage = fc.cpu_usage()
     pow = fc.power_read()
-    status = f"CPU Temperature: {cpu_temp} °C, Power: {pow} watts"
+    status = (
+        f"CPU Temperature: {cpu_temp}°C, CPU Usage: {cpu_usage}%, Power: {pow} watts"
+    )
     return status
